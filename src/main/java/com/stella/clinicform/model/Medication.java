@@ -1,5 +1,7 @@
 package com.stella.clinicform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,5 +24,11 @@ public class Medication {
     private int mouthDrop;
     @Column(name = "mouth_pill")
     private int mouthPill;
+
+//    @JsonIgnoreProperties({"medications"})
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Child.class)
+    @JoinColumn(name = "regno", referencedColumnName = "regno", nullable = false)
+    private Child child;
 
 }
