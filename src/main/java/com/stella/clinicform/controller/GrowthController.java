@@ -1,5 +1,6 @@
 package com.stella.clinicform.controller;
 
+import com.stella.clinicform.model.Child;
 import com.stella.clinicform.model.ChildGrowthDevelopment;
 import com.stella.clinicform.repository.ChildRepository;
 import com.stella.clinicform.repository.GrowthRepository;
@@ -15,9 +16,16 @@ public class GrowthController {
     @Autowired
     private GrowthRepository growthRepository;
 
-    @GetMapping
-    private List<ChildGrowthDevelopment> getChildDevelopment() {
-        return growthRepository.findAll();
+    @Autowired
+    private ChildRepository childRepository;
+
+    @GetMapping("/child/{cid}")
+    private List<ChildGrowthDevelopment> getChildDevelopment(@PathVariable String cid) {
+    	Child child = childRepository.findById(cid).orElse(null);
+        if (child!=null) {
+            return growthRepository.findAllByChild(child);
+        }
+        return null;
     }
 
     @PutMapping("/{id}")
@@ -30,9 +38,15 @@ public class GrowthController {
         return null;
     }
 
-    @PostMapping
-    private ChildGrowthDevelopment addGrowthDevelopment(@RequestBody ChildGrowthDevelopment d) {
-        return growthRepository.save(d);
+    @PostMapping("/child/{cid}")
+    private ChildGrowthDevelopment addGrowthDevelopment(@PathVariable String cid,  @RequestBody ChildGrowthDevelopment d) {
+        Child child = childRepository.findById(cid).orElse(null);
+        if (child!=null) {
+            d.setChild(child);
+            return growthRepository.save(d);
+        }
+
+        return null;
     }
 
 }

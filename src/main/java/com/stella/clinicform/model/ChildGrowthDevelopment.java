@@ -1,6 +1,6 @@
 package com.stella.clinicform.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,13 +20,13 @@ public class ChildGrowthDevelopment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(columnDefinition = "DATE NOT NULL")
+    @Column(columnDefinition = "DATE")
     private String arrivalDate;
-    @Column(columnDefinition = "DATE NOT NULL")
+    @Column(columnDefinition = "DATE")
     private String commingDate;
-    private int childWeight;
+    private double childWeight;
 
-    @JsonIgnoreProperties({"developments"})
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Child.class)
     @JoinColumn(name = "regno", referencedColumnName = "regno", nullable = false)
     private Child child;
